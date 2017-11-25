@@ -7,14 +7,14 @@ set(CMAKE_BUILD_TYPE "Release")
 # explicitly set c++11
 set(CMAKE_CXX_STANDARD 11)
 
-# configure CUDA
-set(CUDA_USE_STATIC_CUDA_RUNTIME OFF)
-
 # configure PCL
 find_package(PCL 1.8.0 REQUIRED)
 include_directories(${PCL_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
+
+# configure CUDA
+set(CUDA_USE_STATIC_CUDA_RUNTIME OFF)
 
 # configure OpenCV
 find_package(OpenCV REQUIRED)
