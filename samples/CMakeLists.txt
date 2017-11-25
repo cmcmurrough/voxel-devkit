@@ -13,9 +13,6 @@ include_directories(${PCL_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
 
-# configure CUDA
-set(CUDA_USE_STATIC_CUDA_RUNTIME OFF)
-
 # configure OpenCV
 find_package(OpenCV REQUIRED)
 include_directories(${OPENCV_INCLUDE_DIRS})
@@ -37,4 +34,7 @@ link_directories($ENV{VOXEL_LIB_DIR})
 # build voxel samples
 add_executable(voxel_viewer voxel_viewer.cpp)
 target_link_libraries(voxel_viewer ${PCL_LIBRARIES} ${OpenCV_LIBS} voxel)
+
+# configure CUDA
+set(CUDA_USE_STATIC_CUDA_RUNTIME OFF)
 
