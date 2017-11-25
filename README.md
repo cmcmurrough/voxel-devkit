@@ -1,2 +1,2 @@
 # voxel_devkit
-Code examples for C9P Voxel modules
+Code examples, notes, and support files for Voxel modules
