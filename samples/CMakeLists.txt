@@ -35,6 +35,6 @@ include_directories($ENV{VOXEL_INCLUDE_DIR})
 link_directories($ENV{VOXEL_LIB_DIR})
 
 # build voxel samples
-add_executable(voxel_viewer samples/voxel_viewer.cpp)
+add_executable(voxel_viewer voxel_viewer.cpp)
 target_link_libraries(voxel_viewer ${PCL_LIBRARIES} ${OpenCV_LIBS} voxel)
 
