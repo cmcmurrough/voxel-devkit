@@ -3,7 +3,7 @@
  * @brief Template for acquiring PCL point clouds from a Voxel device
  *
  * Template for acquiring PCL point clouds from a Voxel device. Incoming data streams from a Voxel device are acquired
- * and converted to PCL point clouds, which are then visualized in real time. This sameples also demonstrates PCL and
+ * and converted to PCL point clouds, which are then visualized in real time. This sample also demonstrates PCL and
  * OpenCV integration.
  *
  * @author Christopher D. McMurrough
