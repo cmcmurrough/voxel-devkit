@@ -67,7 +67,7 @@ int main (int argc, char** argv)
     boost::function<void (const pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr&)> f1 = boost::bind(&cloudCallback, _1);
     Grabber->registerCallback(f1);
 	
-	// create the program termination event handler (ctrl+c)
+    // create the program termination event handler (ctrl+c)
     struct sigaction sigIntHandler;
     sigIntHandler.sa_handler = exitHandler;
     sigemptyset(&sigIntHandler.sa_mask);
@@ -84,7 +84,6 @@ int main (int argc, char** argv)
     }
 
     // stop the grabber
-    Grabber->stop();
     Grabber->stop();
 
     // exit program
