@@ -43,7 +43,6 @@ void cloudCallback(const pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr &cloudIn)
 	    if(pcl::io::savePCDFile<pcl::PointXYZRGBA>(fileName, *cloudIn, true) == -1)
 		{
 			std::printf("error while attempting to save pcd file: %s \n", fileName.c_str());
-			return false;
 		}
 	}
 }
