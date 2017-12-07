@@ -12,8 +12,8 @@
 #include <pcl/point_types.h>
 #include <Voxel.h>
 #include <signal.h>
-#include <thread.h>
-#include <chrono.h>
+#include <thread>
+#include <chrono>
 
 // declare the RGB-D grabber object
 pcl::Grabber* Grabber = new Voxel::FrameGrabber();
