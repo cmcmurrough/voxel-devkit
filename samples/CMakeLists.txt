@@ -37,5 +37,7 @@ link_directories($ENV{VOXEL_LIB_DIR})
 # build voxel samples
 add_executable(voxel_read voxel_read.cpp)
 target_link_libraries(voxel_read ${PCL_LIBRARIES} voxel)
+add_executable(voxel_save voxel_save.cpp)
+target_link_libraries(voxel_save ${PCL_LIBRARIES} ${OpenCV_LIBS} voxel)
 add_executable(voxel_viewer voxel_viewer.cpp)
 target_link_libraries(voxel_viewer ${PCL_LIBRARIES} ${OpenCV_LIBS} voxel)
