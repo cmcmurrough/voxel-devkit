@@ -89,10 +89,6 @@ int main (int argc, char** argv)
     grabber->registerCallback(f1);
     grabber->registerCallback(f2);
 
-	// read processor temperatures
-    //std::vector<float> temperatures;
-    //Voxel::getTemperatures(temperatures);
-
     // start receiving frames
     grabber->start();
 

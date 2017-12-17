@@ -1,39 +1,19 @@
 /***********************************************************************************************************************
- * @file voxel_viewer.cpp
- * @brief Template for acquiring PCL point clouds from a Voxel device
+ * @file voxel_io.cpp
+ * @brief Example for utilizing voxel IO
  *
- * Template for acquiring PCL point clouds from a Voxel device. Incoming data frames are handled asynchronously with a 
- * callback.
+ * Example program for accessing voxel non-camera interfaces (internal temperatures, indicator LEDs, RS-232, etc.)
  *
  * @author Christopher D. McMurrough
  **********************************************************************************************************************/
 
-#include <pcl/point_cloud.h>
-#include <pcl/point_types.h>
 #include <Voxel.h>
 #include <signal.h>
 #include <thread>
 #include <chrono>
 
-// declare the RGB-D grabber object
-pcl::Grabber* Grabber = new Voxel::FrameGrabber();
-
 // function prototypes
-void cloudCallback(const pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr &cloudIn);
 void exitHandler(int terminationCode);
-
-/***********************************************************************************************************************
- * @brief Callback function for received cloud data
- * @param[in] cloudIn the raw cloud data received by the grabber
- * @author Christopher D. McMurrough
- **********************************************************************************************************************/
-void cloudCallback(const pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr &cloudIn)
-{
-    // print frame count
-    static int frameCount = 0;
-    std::cout << "Point cloud frame " << frameCount << " acquired" << std::endl;
-    frameCount++;
-}
 
 /*******************************************************************************************************************//**
 * @brief gracefully exits the program after deallocating shared memory variables
@@ -42,8 +22,8 @@ void cloudCallback(const pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr &cloudIn)
 ***********************************************************************************************************************/
 void exitHandler(int terminationCode)
 {
-    // shutdown the cameraGrabber
-    Grabber->stop();
+    // release the GPIO pins
+    Voxel::releaseLEDs();
 
     // return termination code
     if(terminationCode == EXIT_FAILURE)
@@ -63,12 +43,8 @@ void exitHandler(int terminationCode)
  * @returnS return code (0 for normal termination)
  * @author Christopher D. McMurrough
  **********************************************************************************************************************/
-int main (int argc, char** argv)
+int main(int argc, char *argv[])
 {
-    // register callback functions to handle incoming data streams
-    boost::function<void (const pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr&)> f1 = boost::bind(&cloudCallback, _1);
-    Grabber->registerCallback(f1);
-	
     // create the program termination event handler (ctrl+c)
     struct sigaction sigIntHandler;
     sigIntHandler.sa_handler = exitHandler;
@@ -76,12 +52,31 @@ int main (int argc, char** argv)
     sigIntHandler.sa_flags = 0;
     sigaction(SIGINT, &sigIntHandler, NULL);
 
-    // start receiving frames
-    Grabber->start();
+    // setup the GPIO pins
+    Voxel::initializeLEDs(true, true);
 
-    // wait until user quits program with ctrl+c
-    while (true)
+    // flash LEDs until user quite program with ctrl+c
+    while(true)
     {
-        std::this_thread::sleep_for (std::chrono::milliseconds(100));
+        std::cout << "Toggling LED states" << std::endl;
+        Voxel::setRedLED(true);
+        Voxel::setGreenLED(false);
+        std::this_thread::sleep_for (std::chrono::milliseconds(200));
+
+        std::cout << "Toggling LED states" << std::endl;
+        Voxel::setRedLED(false);
+        Voxel::setGreenLED(true);
+        std::this_thread::sleep_for (std::chrono::milliseconds(200));
+
+        // read processor temperatures
+        std::vector<float> temperatures;
+        Voxel::getTemperatures(temperatures);
+        for(int i = 0; i < temperatures.size(); i++)
+        {
+            std::cout << "   zone " << i << " temperature: " << temperatures.at(i) << std::endl;
+        }
     }
+
+    // exit program
+    exitHandler(0);
 }
